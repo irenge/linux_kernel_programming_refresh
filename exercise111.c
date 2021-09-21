@@ -7,6 +7,7 @@ static int __init  module_taint(void) {
 
 struct list_head  *listx;
 struct module *modx = THIS_MODULE;
+int i = 0;
 
 listx = &modx->list;
 listx = listx->prev;
@@ -28,8 +29,8 @@ static void __exit exit_b(void) {
 	pr_info("Bye: unloading the module 0x%p\n", exit_b);
 
 }
-module_init(todos_init);
-module_exit(todos_exit);
+module_init(module_taint);
+module_exit(exit_b);
 
 MODULE_AUTHOR("Jules Irenge");
 MODULE_DESCRIPTION("linked list exercise ");
