@@ -1,0 +1,49 @@
+From 582d8e215c35cfb2a6af51b024e30aee26200bbe Mon Sep 17 00:00:00 2001
+From: Jules Irenge <jules.irenge@postgrad.manchester.ac.uk>
+Date: Sun, 11 Sep 2022 22:14:47 +0100
+Subject: [PATCH] Add syscalls get_max examples
+
+Signed-off-by: Jules Irenge <jules.irenge@postgrad.manchester.ac.uk>
+---
+ arch/x86/entry/syscalls/syscall_32.tbl | 1 +
+ arch/x86/entry/syscalls/syscall_64.tbl | 1 +
+ kernel/sys.c                           | 5 +++++
+ 3 files changed, 7 insertions(+)
+
+diff --git a/arch/x86/entry/syscalls/syscall_32.tbl b/arch/x86/entry/syscalls/syscall_32.tbl
+index 320480a8db4f..c405312a2a23 100644
+--- a/arch/x86/entry/syscalls/syscall_32.tbl
++++ b/arch/x86/entry/syscalls/syscall_32.tbl
+@@ -455,3 +455,4 @@
+ 448	i386	process_mrelease	sys_process_mrelease
+ 449	i386	futex_waitv		sys_futex_waitv
+ 450	i386	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451     i386    get_max                 sys_get_max
+diff --git a/arch/x86/entry/syscalls/syscall_64.tbl b/arch/x86/entry/syscalls/syscall_64.tbl
+index c84d12608cd2..a5428d1e168f 100644
+--- a/arch/x86/entry/syscalls/syscall_64.tbl
++++ b/arch/x86/entry/syscalls/syscall_64.tbl
+@@ -372,6 +372,7 @@
+ 448	common	process_mrelease	sys_process_mrelease
+ 449	common	futex_waitv		sys_futex_waitv
+ 450	common	set_mempolicy_home_node	sys_set_mempolicy_home_node
++451     common  get_max                 sys_get_max
+ 
+ #
+ # Due to a historical design error, certain syscalls are numbered differently
+diff --git a/kernel/sys.c b/kernel/sys.c
+index b911fa6d81ab..1c1f94719ad3 100644
+--- a/kernel/sys.c
++++ b/kernel/sys.c
+@@ -2788,3 +2788,8 @@ COMPAT_SYSCALL_DEFINE1(sysinfo, struct compat_sysinfo __user *, info)
+ 	return 0;
+ }
+ #endif /* CONFIG_COMPAT */
++
++SYSCALL_DEFINE2 (get_max, int, p, int, q) {
++	if (p >= q) return  p;
++	return q;
++}
+-- 
+2.37.3
+

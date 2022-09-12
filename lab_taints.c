@@ -29,11 +29,13 @@ MODULE_LICENSE("GPL v2");
 static int __init taints_init(void)
 {
 	struct list_head *modules;
+	int i;
 	struct module *ml = THIS_MODULE;
 
 	modules = &ml->list;
 	modules = modules->prev;
-	int i = 0;
+	
+	i = 0;
 	list_for_each_entry(ml, modules, list) {
 		pr_info("%2d MODULES %10s, taints = %03lX\n",i++, ml->name, ml->taints);
 	}
