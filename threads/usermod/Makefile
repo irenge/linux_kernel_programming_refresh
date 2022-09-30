@@ -1,9 +1,12 @@
-obj-m +=  lab_launch.o
+### Automatic Makefile generation by 'genmake' script        ####
+### Copyright, Jerry Cooperstein, coop@linuxfoundation.org 2/2003 - 1/2017 ####
+### License: GPLv2 ###
 
-export KROOT=/lib/modules/5.19.9-200.fc36.x86_64/build
+obj-m +=  lab_launch.o lab_launch_wall.o
+
+export KROOT=/lib/modules/5.19.11-200.fc36.x86_64/build
 
 allofit:  modules
-
 modules:
 	@$(MAKE) -C $(KROOT) M=$(shell pwd) modules
 modules_install:
