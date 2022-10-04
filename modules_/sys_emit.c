@@ -1,23 +1,28 @@
 #include <linux/module.h>
 #include <linux/init.h>
+#include <linux/sysfs.h>
 
 #define BUFSIZE 4
 
 static int __init my_init(void)
 {
-	char buf[BUFSIZE];
+//	int BUFSIZE = 4;
 
-	int x,y;
-	const char* str = "Linux";
+	char __user buf[BUFSIZE];
 
-	x = snprintf(buf, BUFSIZE, str); // length is 5 here : return length of expected to be written
+	//const char* str = "Linux";
+
+	int x;
+
+	x = sysfs_emit(buf, "Hello"); // length is 5 here : return length of expected to be written
 
 	pr_info(" With length %d, The string is %s\n", x, buf);
+	/*
 
-	y = scnprintf(buf, BUFSIZE, str); //length is 3 : return length of what is actually written to buff
+	y = sysfs_emit_at(buf, BUFSIZE, "Linux"); //length is 3 : return length of what is actually written to buff
 
 	pr_info(" With length %d, The string is %s\n", y, buf);
-
+*/
 	return 0;
 }
 static void __exit my_exit(void)

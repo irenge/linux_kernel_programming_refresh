@@ -2,9 +2,9 @@
 ### Copyright, Jerry Cooperstein, coop@linuxfoundation.org 2/2003 - 1/2017 ####
 ### License: GPLv2 ###
 
-obj-m +=  hello_kernel.o module_info.o snprintf_mod.o
+obj-m +=  greg.o hello_kernel.o module_info.o snprintf_mod.o sys_emit.o
 
-export KROOT=/lib/modules/5.19.9-200.fc36.x86_64/build
+export KROOT=/lib/modules/5.19.10-200.fc36.x86_64/build
 
 allofit:  modules
 modules:

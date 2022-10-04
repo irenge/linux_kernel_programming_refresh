@@ -4,6 +4,7 @@
 static int __init my_init(void)
 {
 	pr_info("Hello: module loaded at 0x%p\n", my_init);
+	pr_info("PAGESIZE = %d\n", PAGESIZE);
 	return 0;
 }
 static void __exit my_exit(void)
