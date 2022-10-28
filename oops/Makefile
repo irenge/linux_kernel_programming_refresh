@@ -2,9 +2,11 @@
 ### Copyright, Jerry Cooperstein, coop@linuxfoundation.org 2/2003 - 1/2017 ####
 ### License: GPLv2 ###
 
-obj-m +=  simple_char.o
+ccflags-y += -g
 
-export KROOT=/lib/modules/5.19.14-200.fc36.x86_64/build
+obj-m +=  oopsit.o
+
+export KROOT=/lib/modules/5.19.11-200.fc36.x86_64/build
 
 allofit:  modules
 modules:
