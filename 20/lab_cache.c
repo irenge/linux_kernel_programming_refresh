@@ -3,6 +3,7 @@
 #include <linux/mm.h>
 #include <linux/slab.h>
 #include <linux/init.h>
+#include <linux/moduleparam.h>
 
 static struct kmem_cache *my_cache;
 static int size = 41 * PAGE_SIZE;
@@ -31,8 +32,14 @@ static int __init my_init(void)
 		return -ENOMEM;
 	}
 	pr_info(" successfully created a cache object\n");
+	
+	pr_info("  size = %d\n", size);
+
 	sz = kmem_cache_shrink(my_cache);
-	pr_info(" Shrinked by %d\n",sz);
+	pr_info(" Shrinked by %d : size = %d\n",sz, size);
+	sz = kmem_cache_shrink(my_cache);
+        pr_info(" Shrinked by %d : size = %d\n",sz, size);
+
 	
 	return 0;
 }
