@@ -4,7 +4,7 @@
 
 obj-m +=  modules0.o modules1.o modules2.o
 
-export KROOT=/lib/modules/5.19.8-200.fc36.x86_64/build
+export KROOT=/lib/modules/6.0.8-300.fc37.x86_64/build
 
 allofit:  modules
 modules:

@@ -92,8 +92,10 @@ static int __init todos_init(void)
 	   sprintf(mwisho->action, "Last toDo %d", 11);
 	   choice(11, mwisho);
 	   pr_info("Last adding %s at position %d to Todo list\n", mwisho->action, mwisho->intvar);
-	   list_add_tail(&mwisho->tlist, &todos_list);
 	   
+	   //list_add_tail(&mwisho->tlist, &todos_list);
+	   list_move (&mwisho->tlist, &todos_list);
+
 	   list_for_each(p, &todos_list) {
 		   struct todos_entry *f = list_entry(p, struct todos_entry, tlist);
 		   pr_info("%s and % d", f->action, f->intvar);

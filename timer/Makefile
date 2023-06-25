@@ -1,10 +1,6 @@
-### Automatic Makefile generation by 'genmake' script        ####
-### Copyright, Jerry Cooperstein, coop@linuxfoundation.org 2/2003 - 1/2017 ####
-### License: GPLv2 ###
+obj-m +=  hello_timer.o 
 
-obj-m +=  simple_char.o
-
-export KROOT=/lib/modules/5.19.14-200.fc36.x86_64/build
+export KROOT=/lib/modules/`uname -r`/build
 
 allofit:  modules
 modules:

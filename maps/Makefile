@@ -2,9 +2,9 @@
 ### Copyright, Jerry Cooperstein, coop@linuxfoundation.org 2/2003 - 1/2017 ####
 ### License: GPLv2 ###
 
-obj-m +=  atom_int.o
+obj-m +=  maps.o
 
-export KROOT=/lib/modules/6.1.12-200.fc37.x86_64/build
+export KROOT=/lib/modules/6.0.14-200.fc36.x86_64/build
 
 allofit:  modules
 modules:

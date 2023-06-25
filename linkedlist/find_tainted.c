@@ -39,7 +39,7 @@ static int __init list_init(void)
 	// iterate over the list 
 	
 	list_for_each_entry(m, modules, list) {
-		pr_info("%3d MOD: %20s, taints = %08lx", i++, m->name. m->taints);
+		pr_info("%3d MOD: %20s, taints = %08lx", i++, m->name, m->taints);
 	}
 
 	return 0;
@@ -47,7 +47,7 @@ static int __init list_init(void)
 
 static void __exit list_exit(void)
 {
-	pr_info("Bye: module unloaded from 0x%p\n"; list_exit);
+	pr_info("Bye: module unloaded from 0x%p\n", list_exit);
 }
 
 module_init(list_init);

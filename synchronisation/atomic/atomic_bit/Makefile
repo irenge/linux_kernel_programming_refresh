@@ -2,9 +2,9 @@
 ### Copyright, Jerry Cooperstein, coop@linuxfoundation.org 2/2003 - 1/2017 ####
 ### License: GPLv2 ###
 
-obj-m +=  lab_debugfs.o lab_sysrq.o sysRq.o
+obj-m +=  atom_bit.o
 
-export KROOT=/lib/modules/6.1.6-200.fc37.x86_64/build
+export KROOT=/lib/modules/6.1.12-200.fc37.x86_64/build
 
 allofit:  modules
 modules:

@@ -1,10 +1,6 @@
-### Automatic Makefile generation by 'genmake' script        ####
-### Copyright, Jerry Cooperstein, coop@linuxfoundation.org 2/2003 - 1/2017 ####
-### License: GPLv2 ###
+obj-m += hello_char_driver.o
 
-obj-m +=  oopsit.o
-
-export KROOT=/lib/modules/6.0.18-300.fc37.x86_64/build
+export KROOT=/lib/modules/`uname -r`/build
 
 allofit:  modules
 modules:
@@ -16,4 +12,4 @@ kernel_clean:
 
 clean: kernel_clean
 	rm -rf   Module.symvers modules.order
-ccflags-y += -g
+
