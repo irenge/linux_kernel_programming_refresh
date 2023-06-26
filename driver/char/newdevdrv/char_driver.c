@@ -2,7 +2,6 @@
 #include<linux/module.h>
 #include<linux/fs.h>
 #include <linux/cdev.h>
-#include <linux/uaccess.h>
 
 #define scull_major 0
 #define scull_minor 0
@@ -45,8 +44,10 @@ int chrdev_open(struct inode* inode, struct file* file)
 ssize_t chrdev_read(struct file* file, char* __user buf, size_t len, loff_t* off)
 
 {
-	pr_info("Inside the %s function\n", __FUNCTION__);
 	int to_copy, not_copied, delta;
+
+	pr_info("Inside the %s function\n", __FUNCTION__);
+
 
 	to_copy = min(len, cust_dev_buffer_index);
 
@@ -57,30 +58,30 @@ ssize_t chrdev_read(struct file* file, char* __user buf, size_t len, loff_t* off
 	/* Determine the actual number of copied bytes */
 	delta = to_copy - not_copied;
 
-	pr_info("User requested to read %d bytes from the device: actually %d bytes have been read\n", len, delta);
+	pr_info("User requested to read %ld bytes from the device: actually %d bytes have been read\n", len, delta);
 
 	return delta;
 }
 
 
-	/*      if(*off >= sizeof(kern_buf))
-		return 0;
+/*      if(*off >= sizeof(kern_buf))
+	return 0;
 
-		if (len > sizeof(kern_buf)){
-		printk(KERN_ERR "Length is bigger!");
-		len = sizeof(kern_buf);
-		}
+	if (len > sizeof(kern_buf)){
+	printk(KERN_ERR "Length is bigger!");
+	len = sizeof(kern_buf);
+	}
 
-		copy_to_user(buf, kern_buf, len);
+	copy_to_user(buf, kern_buf, len);
 
-		return len;
-		*/
-	//return delta;
+	return len;
+	*/
+//return delta;
 //}
 
-ssize_t chrdev_write(struct file* file, const char* __user buf, size_t len, loff_t* off)
+ssize_t chrdev_write(struct file* file, const char* __user user_buf, size_t count, loff_t* off)
 {
-	pr_info("Inside the %s function\n", __FUNCTION__ );
+	//	pr_info("Inside the %s function\n", __FUNCTION__ );
 	/*
 	   if(len >= sizeof(kern_buf))
 	   return -EIO;
@@ -93,6 +94,8 @@ ssize_t chrdev_write(struct file* file, const char* __user buf, size_t len, loff
 	/* This time, the user buffer is a source of data, so it is not an internal variable: it contains fixed, given data */
 
 	int to_copy, not_copied, delta;
+	pr_info("Inside the %s function\n", __FUNCTION__ );
+
 
 	/* Determine the amount of data to be written into the buffer. If `count' exceeds the size of the buffer,
 	 * write only sizeof(cust_dev_buffer) characters. This is a security precaution similar to the one for driver_read,
@@ -101,7 +104,7 @@ ssize_t chrdev_write(struct file* file, const char* __user buf, size_t len, loff
 
 	/* Write into the internal buffer the data provided by the user. If cust_dev_buffer_index was non-zero, that is if the
 	 * cust_dev_buffer was non-empty, this overwrites it starting from its beginning. */
-	not_copied = copy_from_user(cust_dev_buffer, user_buffer, to_copy);
+	not_copied = copy_from_user(cust_dev_buffer, user_buf, to_copy);
 
 	/* Determine the actual number of written bytes */
 	delta = to_copy - not_copied;
@@ -109,12 +112,12 @@ ssize_t chrdev_write(struct file* file, const char* __user buf, size_t len, loff
 	/* The new actual amount of data inside the buffer */
 	cust_dev_buffer_index = delta;
 
-	printk("User requested to write %d bytes into the device internal buffer: actually %d bytes have been written\n", count, delta);
+	pr_info("User requested to write %ld bytes into the device internal buffer: actually %d bytes have been written\n", count, delta);
 
 	/* Terminate the string with NULL into the internal buffer */
 	cust_dev_buffer[delta] = 0;
 
-	printk("The device internal buffer has the following contents: %s\n", cust_dev_buffer);
+	pr_info("The device internal buffer has the following contents: %s\n", cust_dev_buffer);
 
 	return delta;
 }
@@ -122,7 +125,7 @@ ssize_t chrdev_write(struct file* file, const char* __user buf, size_t len, loff
 int chrdev_release(struct inode* inode, struct file* file)
 {
 	pr_info("Inside the %s function\n", __FUNCTION__);
-	printk(KERN_INFO "device closed");
+	pr_info("device closed");
 	return 0;
 }
 
@@ -161,7 +164,7 @@ static int __init chardev_init(void)
 		pr_info("Can not create device file\n");
 		goto FileError;
 	}
-	
+
 	/* Initialze device */
 	cdev_init(&my_device, &fops);
 
@@ -173,7 +176,7 @@ static int __init chardev_init(void)
 
 	return 0;
 AddError:
-        device_destroy(dev_class, dev);
+	device_destroy(dev_class, dev);
 FileError:
 	class_destroy(dev_class);
 ClassError:
