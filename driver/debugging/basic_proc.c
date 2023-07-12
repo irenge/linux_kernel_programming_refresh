@@ -2,6 +2,7 @@
 #include <linux/kernel.h>
 #include <linux/proc_fs.h>
 #include<linux/sched.h>
+#include <linux/sysfs.h>
 
 struct proc_dir_entry *proc_file_entry;
 
