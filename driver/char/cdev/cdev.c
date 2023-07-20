@@ -10,16 +10,17 @@ int scdev_open(struct inode* inode, struct file* file);
 ssize_t scdev_read(struct file* file, char* buf, size_t len, loff_t* off);
 ssize_t scdev_write(struct file* file, const char* buf, size_t len, loff_t* off);
 int scdev_release(struct inode* inode, struct file* file);
-/*
-static struct scull_dev{
-	struct scull_qset *data;
-	int quantum;
-	int qset;
-	unsigned long size;
-	struct semaphore sem;
-	unsigned int access_key;
-	struct cdev cdev;
-};
+/* 
+ * static struct scull_dev{
+ * struct scull_qset *data;
+ * int quantum;
+ * int qset;
+ * unsigned long size;
+ * struct semaphore sem;
+ * unsigned int access_key;
+ * struct cdev cdev;
+ * };
+ *
 */
 //struct scull_dev *ncdev;
 
@@ -54,7 +55,7 @@ static int __init chardev_init(void)
 	int index, err, devno;
 	my_cdev = cdev_alloc();
 	my_cdev->ops = &fops;
-	 cdev_init(my_cdev, &fops);
+	cdev_init(my_cdev, &fops);
 	 index = 1;
 
 	 devno = MKDEV(255, index);

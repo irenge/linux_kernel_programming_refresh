@@ -2,7 +2,7 @@
 ### Copyright, Jerry Cooperstein, coop@linuxfoundation.org 2003-2023 ####
 ### License: GPLv2 ###
 
-obj-m +=  simple_char.o
+obj-m +=  char_test.o
 
 export KROOT=/lib/modules/6.5.0-0.rc2.217.vanilla.fc38.x86_64/build
 
