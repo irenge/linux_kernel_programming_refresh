@@ -1,8 +1,4 @@
-### Automatic Makefile generation by 'genmake' script        ####
-### Copyright, Jerry Cooperstein, coop@linuxfoundation.org 2003-2023 ####
-### License: GPLv2 ###
-
-obj-m +=  lab_module1.o
+obj-m +=  lab_module1.o lab_module2.o
 
 export KROOT=/lib/modules/6.5.0-0.rc2.217.vanilla.fc38.x86_64/build
 
