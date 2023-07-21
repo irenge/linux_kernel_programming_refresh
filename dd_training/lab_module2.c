@@ -3,12 +3,17 @@
 
 extern int og;
 extern void print_face(int *num);
-extern int x = 12;
-extern int y = 10;
+extern int x;
+extern int y;
 extern void avgx(int x, int y);
 
 static int __init mmstart(void) {
+	x = 10;
+	y = 12;
+	og = 12;
+
 	pr_info("second module says 'Hi' ");
+	avgx(x, y);
 	print_face(&og);
 
 	return 0;
