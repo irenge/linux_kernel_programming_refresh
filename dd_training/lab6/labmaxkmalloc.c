@@ -9,6 +9,7 @@ static int __init mstart(void) {
 	static char *buff;
 	int i;
 
+	pr_info("\nUsing kmalloc:\n");
 	for(i = PAGE_SIZE, x = 0; x < MAX_ORDER + 1; x++, i *= 2)
 	{
 		pr_info("x = %2ld, pages=%6ld, size = %7d\n", x, i/PAGE_SIZE, i);
@@ -18,7 +19,21 @@ static int __init mstart(void) {
 		break;
 		}
 		pr_info("\nKmalloc ... ok !\n");
+		kfree(buff);
 	}
+	pr_info("\nUsing kvmalloc\n");
+	  for(i = PAGE_SIZE, x = 0; x < MAX_ORDER + 1; x++, i *= 2)
+        {
+                pr_info("x = %2ld, pages=%6ld, size = %7d\n", x, i/PAGE_SIZE, i);
+                buff = (char *) kvmalloc((size_t) i, GFP_ATOMIC);
+                if (!buff) {
+                        pr_err("\nMemory allocation failed !\n");
+                break;
+                }
+                pr_info("\nKmalloc ... ok !\n");
+                kvfree(buff);
+        }
+
 	
 
         
@@ -26,6 +41,7 @@ static int __init mstart(void) {
 }
 
 static void __exit mexit(void) {
+	pr_info("\nBye bye\n");
 }
 
 module_init(mstart);
