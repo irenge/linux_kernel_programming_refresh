@@ -1,6 +1,6 @@
-obj-m +=  misc_basic_ddrv.o lab_module1.o lab_module2.o
+obj-m +=  labmaxkmalloc.o lab_maxvmalloc.o
 
-export KROOT=/lib/modules/6.1.41-gentoo-dist/build
+export KROOT=/lib/modules/6.4.9-200.fc38.x86_64/build
 
 allofit:  modules
 modules:
