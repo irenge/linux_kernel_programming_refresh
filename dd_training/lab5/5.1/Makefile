@@ -1,6 +1,6 @@
-obj-m +=  labmaxknvmalloc.o labmaxvmalloc.o
+obj-m +=  lab_module1.o lab_module2.o
 
-export KROOT=/lib/modules/6.4.9-gentoo-dist/build
+export KROOT=/lib/modules/6.5.0-0.rc2.217.vanilla.fc38.x86_64/build
 
 allofit:  modules
 modules:

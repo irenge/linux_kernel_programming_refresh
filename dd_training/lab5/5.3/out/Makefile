@@ -1,6 +1,10 @@
-obj-m +=  labmaxknvmalloc.o labmaxvmalloc.o
+### Automatic Makefile generation by 'genmake' script        ####
+### Copyright, Jerry Cooperstein, coop@linuxfoundation.org 2003-2023 ####
+### License: GPLv2 ###
 
-export KROOT=/lib/modules/6.4.9-gentoo-dist/build
+obj-m +=  basic_cd1.o trivial.o
+
+export KROOT=/lib/modules/6.1.41-gentoo-dist/build
 
 allofit:  modules
 modules:

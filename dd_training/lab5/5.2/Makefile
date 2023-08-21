@@ -2,11 +2,11 @@
 ### Copyright, Jerry Cooperstein, coop@linuxfoundation.org 2003-2023 ####
 ### License: GPLv2 ###
 
-obj-m +=  exercise7_dynamic.o exercise7_misc.o exercise7_udev.o exercise7_withpriv.o
+obj-m +=  lab_module1.o lab_module1_copy.o lab_module2.o
 
-export KROOT=/lib/modules/6.4.9-gentoo-dist/build
+export KROOT=/lib/modules/6.1.41-gentoo-dist/build
 
-allofit:  userprogs modules
+allofit:  modules
 modules:
 	@$(MAKE) -C $(KROOT) M=$(shell pwd) modules
 modules_install:
@@ -14,10 +14,5 @@ modules_install:
 kernel_clean:
 	@$(MAKE) -C $(KROOT) M=$(shell pwd) clean
 
-userprogs:
-	@$(MAKE) \
-		CFLAGS="-O2 -Wall -pthread" \
-	 lab_char_test
-
 clean: kernel_clean
-	rm -rf  lab_char_test  Module.symvers modules.order
+	rm -rf   Module.symvers modules.order
