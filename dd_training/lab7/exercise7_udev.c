@@ -1,9 +1,3 @@
-/* **************** LFD430:6.4 s_04/sample_char_driver.c ****************
- * The code herein is: Copyright The Linux Foundation, 2023
- *
- * Sample Character Driver
- */
-
 #include <linux/module.h>	/* for modules */
 #include <linux/fs.h>		/* file_operations */
 #include <linux/uaccess.h>	/* copy_(to,from)_user */
