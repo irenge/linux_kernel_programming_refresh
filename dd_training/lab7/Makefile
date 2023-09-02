@@ -1,10 +1,6 @@
-### Automatic Makefile generation by 'genmake' script        ####
-### Copyright, Jerry Cooperstein, coop@linuxfoundation.org 2003-2023 ####
-### License: GPLv2 ###
+obj-m +=  cache_7.o exercise7_dynamic.o exercise7_misc.o exercise7_udev.o exercise7_withpriv.o
 
-obj-m +=  exercise7_dynamic.o exercise7_misc.o exercise7_udev.o exercise7_withpriv.o
-
-export KROOT=/lib/modules/6.4.9-gentoo-dist/build
+export KROOT=/lib/modules/6.4.10-200.fc38.x86_64/build
 
 allofit:  userprogs modules
 modules:
