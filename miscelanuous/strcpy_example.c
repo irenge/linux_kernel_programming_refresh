@@ -6,8 +6,8 @@ char * str = "demonstrate strcpy()";
 char * example;
 //char examples[21];
 char* examples;
-
-
+char samples[16];
+char dvil[12];
 
 static int __init my_init(void)
 {
@@ -27,14 +27,24 @@ static int __init my_init(void)
 //	strncpy(examples, str, sizeof(examples));
 	strncpy(examples, str, count);
 
-
+        if (count > sizeof(samples))
+			count = sizeof(samples);
+//	pr_info("\n count = %ld\n");
+	strscpy(samples, str, sizeof(samples));
 	//if (n > count){
 	pr_info("\n%ld copied\n",n);
 
 	pr_info("\n%s\n", example);
 	pr_info("\n%s\n", examples);
+	  pr_info("\n count = %ld\n");
+
+	pr_info("\n%s\n", samples);
 	
 	pr_info("\nModule loaded\n");
+
+	strscpy(dvil, "hello my man", sizeof(dvil));
+	pr_info("\n%s\n", dvil);
+
 	return 0;
 }
 static void __exit my_exit(void)

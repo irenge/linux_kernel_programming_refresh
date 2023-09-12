@@ -3,9 +3,10 @@
 #include <linux/module.h>
 
 
-#define SHARED_IRQ 17
+#define SHARED_IRQ 174
 
 static unsigned int irq = SHARED_IRQ, mydev_id, irq_counter;
+int ret;
 
 static irqreturn_t my_interrupt(int irq, void *dev_id) {
 	irq_counter++;
@@ -14,11 +15,11 @@ static irqreturn_t my_interrupt(int irq, void *dev_id) {
 }
 
 static int __init my_interrupt_init(void) {
-	if(request_irq(irq, my_interrupt, IRQF_SHARED, "hello_interrupt", &mydev_id)) {
+	if((ret = request_irq(irq, my_interrupt, IRQF_SHARED, "hello_interrupt", &mydev_id))){
 		pr_info("\nFailed to allocate irq %d\n", irq);
-		return -EBUSY;
+		return ret;
 	}
-	pr_info("\nSuccessfully loading ISR handler\n");
+	pr_info("\n%d: Successfully loading ISR handler\n", ret);
 	return 0;
 }
 
