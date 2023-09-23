@@ -1,6 +1,7 @@
+
 obj-m +=  cache_7.o exercise7_dynamic.o exercise7_misc.o exercise7_udev.o exercise7_withpriv.o
 
-export KROOT=/lib/modules/6.4.10-200.fc38.x86_64/build
+export KROOT=/lib/modules/6.5.3-gentoo-dist/build
 
 allofit:  userprogs modules
 modules:
