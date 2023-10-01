@@ -1,6 +1,6 @@
-obj-m +=  inserting_delays.o
+obj-m +=  hrexamp.o hrtimer_example.o inserting_delays.o ktimers.o
 
-export KROOT=/lib/modules/6.4.14-200.fc38.x86_64/build
+export KROOT=/lib/modules/6.5.5-gentoo-dist/build
 
 allofit:  modules
 modules:

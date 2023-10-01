@@ -1,4 +1,5 @@
 #include <linux/module.h>
+#include <linux/kernel.h>
 #include <linux/timer.h>
 #include <linux/init.h>
 #include <linux/version.h>
@@ -8,6 +9,9 @@
 
 static struct kt_data {
 	struct hrtimer timer;
+	int period_in_secs;
+	unsigned long start_time;
+	char struct_id;
 	ktime_t period;
 } *data;
 

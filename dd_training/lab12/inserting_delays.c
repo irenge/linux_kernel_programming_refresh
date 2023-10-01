@@ -4,7 +4,7 @@
 
 static int __init hello_init_timers(void) {
 	
-	int delay,y, jifdone;
+	int delay, jifdone;
 	unsigned int mls = 7000;
 	delay = 2;
 	jifdone =  jiffies + delay * HZ;
