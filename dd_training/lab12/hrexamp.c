@@ -17,12 +17,16 @@ static  enum hrtimer_restart ktfun(struct hrtimer *var)
 	ktime_t now = var->base->get_time();
 
 	pr_info("timer running at jiffies=%ld\n", jiffies);
-	hrtimer_forward(var, now, data->period);
-	return HRTIMER_RESTART;
+	hrtimer_forward(var, now, data->period); /* called to reset a new expiration time */
+	return HRTIMER_RESTART; /* return for a recurring timer if not would have been HRTIMER_NORESTART */
 }
 static int __init my_init(void)
 {
 	data = kmalloc(sizeof(*data), GFP_KERNEL);
+	
+	if(!data)
+		return -ENOMEM;
+
 	data->period = ktime_set(1, 0);
 	hrtimer_init(&data->timer, CLOCK_REALTIME, HRTIMER_MODE_REL);
 	data->timer.function = ktfun;
@@ -32,7 +36,11 @@ static int __init my_init(void)
 }
 static void __exit my_exit(void)
 {
-	hrtimer_cancel(&data->timer);
+	if (!hrtimer_cancel(&data->timer)) {
+		pr_info("\nTimer expired!\n");
+	} else 
+		pr_info("\nTimer successfully cancelled\n");
+
 	kfree(data);
 }
 module_init(my_init);
