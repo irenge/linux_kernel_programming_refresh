@@ -32,7 +32,7 @@ static int __init my_init(void)
 	
 	data->value = len;
 	tl = &data->timer;
-	timer_setup(tl, funrun, 0);
+	timer_setup(tl, funrun, 0); /* Initialise the timer list */
 
 	mod_timer(tl, jiffies + HZ);
 
