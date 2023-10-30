@@ -43,17 +43,23 @@ static struct net_device_ops ndo = {
 static void mynet_setup(struct net_device *dev)
 {
 	
-	int i;
+	unsigned int i;
 	int j;
         char phony[ETH_ALEN];
-        netdev_info(dev, "%s(%s)\n", __func__, dev->name);
+        
+	netdev_info(dev, "%s(%s)\n", __func__, dev->name);
+	pr_info("\nMac address length is %d\n", ETH_ALEN);
 
-	  /* Fill in the MAC address with a phoney */
+	/* Fill in the MAC address with a phoney */
         for (j = 0; j < ETH_ALEN; ++j) {
 		 get_random_bytes(&i, sizeof(int)); //fill the entire bitspace of the int instead of only one byte
-	         pr_info("\ni = %d\n", i);
+	         i = i % 15;
+
+		 pr_info("\ni = %d\n", i);
 		 phony[j] = (char)i;
 	}
+
+	dev_addr_mod(dev, 0, phony, ETH_ALEN);
 
 	ether_setup(dev);
 	dev->netdev_ops = &ndo;
