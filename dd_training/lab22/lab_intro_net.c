@@ -29,7 +29,7 @@ static int ndo_stop(struct net_device *dev) {
  *  through in any case
  */
 
-static void printline(unsigned char *data, int n)
+static void printline(struct net_device *dev, unsigned char *data, int n)
 {
 	char line[256], entry[16];
 	int j;
@@ -39,7 +39,7 @@ static void printline(unsigned char *data, int n)
 		sprintf(entry, " %2x", data[j]);
 		strcat(line, entry);
 	}
-	pr_info("%s\n", line);
+	netdev_info(dev, "%s\n", line);
 }
 
 
@@ -47,7 +47,7 @@ static int my_start_xmit(struct sk_buff *skb, struct net_device *dev) {
 	int len; 
 	char *data;
 	int i;
-	static int x;
+	static int pkts;
 
 	//struct my_data *priv = netdev_priv(dev);
 
@@ -55,21 +55,21 @@ static int my_start_xmit(struct sk_buff *skb, struct net_device *dev) {
 	data = skb->data;
 	netif_trans_update(dev);
 
-	pr_info("\nsending packets: bunch %d\n", x);
-	++x;
+	netdev_info(dev, "\n%d packets sent \n", pkts);
+	++pkts;
 	/* print out 16 bytes per line */
 
 	for (i = 0; i < skb->len; i += 16)
-		printline(&skb->data[i],
+		printline(dev, &skb->data[i],
 				(skb->len - i) < 16 ? skb->len - i : 16);
 
-	pr_info("\n");
+	netdev_info(dev, "\n");
 	/* so we can free it in interrupt routine */
 	//priv->skb = skb;
 
 	//mynet_hw_tx(data, len, dev);
 	dev_kfree_skb(skb);
-	
+
 	stats->tx_bytes += skb->len;
 	++stats->tx_packets;
 
@@ -92,26 +92,37 @@ static struct net_device_ops ndo = {
 	.ndo_get_stats = mynet_stats,
 };
 
-static void mynet_setup(struct net_device *dev)
-{
+void get_mac(struct net_device *dev, char *mac, int len) {
 
 	unsigned int i;
-	int j;
-	char phony[ETH_ALEN];
+        int j;
+	
+	netdev_info(dev, "\nMac address length is %d\n", len);
 
-	netdev_info(dev, "%s(%s)\n", __func__, dev->name);
-	pr_info("\nMac address length is %d\n", ETH_ALEN);
-
-	/* Fill in the MAC address with a phoney */
-	for (j = 0; j < ETH_ALEN; ++j) {
+	/* Fill in the MAC address with random number */
+	for (j = 0; j < len; ++j) {
 		get_random_bytes(&i, sizeof(int)); //fill the entire bitspace of the int instead of only one byte
 		i = i % 15;
 
-		pr_info("\ni = %d\n", i);
-		phony[j] = (char)i;
+		netdev_info(dev, "\ni = %d\n", i);
+		mac[j] = (char)i;
 	}
+	
+	dev_addr_mod(dev, 0, mac, len);
 
-	dev_addr_mod(dev, 0, phony, ETH_ALEN);
+}
+
+
+static void mynet_setup(struct net_device *dev)
+{
+
+	char phony[ETH_ALEN];
+
+	netdev_info(dev, "%s(%s)\n", __func__, dev->name);
+
+	get_mac(dev, phony, ETH_ALEN);
+
+	//dev_addr_mod(dev, 0, phony, ETH_ALEN);
 
 	ether_setup(dev);
 	dev->netdev_ops = &ndo;
