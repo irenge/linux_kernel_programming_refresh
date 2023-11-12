@@ -20,7 +20,7 @@ static void funrun(struct timer_list *tl) {
 	struct kt_data *ndata = from_timer(ndata, tl, timer);
 	pr_info("\nKernel timer: period = %ld elapsed = %ld\n", ndata->period, jiffies - ndata->start_time);
 	pr_info("\nCurrent pid = %d\n", (int) current->pid);
-        mod_timer(tl, jiffies + ndata->period); /* re activate the timer */
+        mod_timer(tl, jiffies + ndata->period); /* re-activate the timer */
 
 }
 

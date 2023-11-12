@@ -50,4 +50,4 @@ static void __exit my_exit(void)
 module_init(my_init);
 module_exit(my_exit);
 MODULE_LICENSE("GPL v2");
-
+MODULE_AUTHOR("Jules Irenge");
