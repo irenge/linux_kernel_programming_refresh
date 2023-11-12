@@ -1,10 +1,7 @@
-### Automatic Makefile generation by 'genmake' script        ####
-### Copyright, Jerry Cooperstein, coop@linuxfoundation.org 2/2003 - 1/2017 ####
-### License: GPLv2 ###
 
 obj-m +=  queue.o 
 
-export KROOT=/lib/modules/6.0.14-200.fc36.x86_64/build
+export KROOT=/lib/modules/`uname -r `/build
 
 allofit:  modules
 modules:
