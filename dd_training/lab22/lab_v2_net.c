@@ -1,4 +1,7 @@
 #include<linux/module.h>
+#include <linux/etherdevice.h>
+#include <linux/ip.h>
+#include <linux/tcp.h>
 #include<linux/netdevice.h>
 #include <linux/init.h>
 #include <linux/version.h>
@@ -6,7 +9,7 @@
 
 struct net_device *my_net;
 
-struct my_priv *priv;
+//struct my_priv *priv;
 
 struct my_priv {
 	struct net_device_stats *stats;
@@ -16,6 +19,8 @@ struct my_priv {
 	struct sk_buff *skb;
 	spinlock_t lock;
 }
+
+
 
 static int ndo_open(struct net_device *dev) {
 	netdev_info(dev, "Hit: %s(%s)\n", __func__, dev->name);
@@ -52,75 +57,50 @@ static void printline(struct net_device *dev, unsigned char *data, int n)
 }
 
 
-static void net_receive(struct sk_buff *skb, struct net_device *dev) {
-//	static int pkts;
 
-	netdev_info(dev, "\n packets received \n");
-	stats->rx_bytes += skb->len;
-	++stats->rx_packets;
-	netif_rx(skb);
+void mynet_hw_tx(char *buf, int len, struct net_device *dev) {
+	struct net_device *dest;
+	struct my_priv *priv;
+
+	if(len  < sizeof(struct ethhdr) + sizeof(struct ipthr)) {
+		pr_info("\nmynet: Hmm... packet too short (%i octets)\n", len);
+		return;
+	}
+
+	dest = my_net;
+	priv = netdev_priv(dev);
+
+	priv->pkt_len = len;
+	priv->pkt_data = buf;
+	pr_info("\nmynet tx \n");
+	dev_kfree(priv->skb);
+
+
 }
 
-
 static int net_transmit(struct sk_buff *skb, struct net_device *dev) {
+
 	int len; 
 	char *data;
 	int i;
 	static int pkts;
 
-	//struct my_data *priv = netdev_priv(dev);
+	struct my_data *priv = netdev_priv(dev);
 
 	len = skb->len;
 	data = skb->data;
 	netif_trans_update(dev);
 
-	netdev_info(dev, "\n%d packets sent \n", pkts);
-	++pkts;
-	/* print out 16 bytes per line */
+	priv->skb = skb;
 
-	for (i = 0; i < skb->len; i += 16)
-		printline(dev, &skb->data[i],
-				(skb->len - i) < 16 ? skb->len - i : 16);
-
-	netdev_info(dev, "\n");
-	/* so we can free it in interrupt routine */
-	//priv->skb = skb; /* remove to allow the loop back net_receive
-
-	//mynet_hw_tx(data, len, dev);
-	//dev_kfree_skb(skb);
-
-	stats->tx_bytes += skb->len;
-	++stats->tx_packets;
-
-	/* loop back */
-	net_receive(skb, dev);
+	mynet_hw_tx(data, len, dev);
 
 	return 0;
 }
 
-static int my_start_xmit(struct sk_buff *skb, struct net_device *dev)
-{
-int len;
-char *data;
-struct mydata *priv = netdev_priv(dev);
-
-len = skb->len;
-data = skb->data;
-netif_trans_update(dev);
-
-/* so we can free it in interrupt routine */
-priv->skb = skb;
-
-
-}
-/*
-   static void mynet_rx(struct net_device *dev, int len, unsigned char *buf) {
-   struct 
-   */
-
 static struct net_device_stats *mynet_stats(struct net_device *dev) {
-	 netdev_info(dev, "Hit: %s(%s)\n", __func__, dev->name);
-	 return &dev->stats;
+	netdev_info(dev, "Hit: %s(%s)\n", __func__, dev->name);
+	return &dev->stats;
 }
 
 
@@ -128,7 +108,7 @@ static struct net_device_ops ndo = {
 	.ndo_open = ndo_open,
 	.ndo_stop = ndo_stop,
 	.ndo_start_xmit = net_transmit,
-	.ndo_get_stats = mynet_stats,
+//	.ndo_get_stats = mynet_stats,
 };
 
 void get_mac(struct net_device *dev, char *mac, int len) {
@@ -150,7 +130,6 @@ void get_mac(struct net_device *dev, char *mac, int len) {
 	dev_addr_mod(dev, 0, mac, len);
 
 }
-
 
 static void mynet_setup(struct net_device *dev)
 {
@@ -207,7 +186,7 @@ static int __init net_load(void){
 }
 
 static void __exit net_unload(void) {
-	
+
 	netdev_info(my_net, "<0> Cleaning Up the network module\n");
 	unregister_netdev(my_net);
 	free_netdev(my_net);
