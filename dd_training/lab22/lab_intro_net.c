@@ -3,6 +3,7 @@
 #include <linux/init.h>
 #include <linux/version.h>
 #include <linux/etherdevice.h>
+//#include <linux/if_ether.h>
 
 struct net_device *my_net;
 struct my_priv *priv;
@@ -131,15 +132,15 @@ void get_mac(struct net_device *dev, char *mac, int len) {
 static void mynet_setup(struct net_device *dev)
 {
 
-	char phony[ETH_ALEN];
+	//char phony[ETH_ALEN];
 
 	netdev_info(dev, "%s(%s)\n", __func__, dev->name);
 
-	get_mac(dev, phony, ETH_ALEN);
+	//get_mac(dev, phony, ETH_ALEN);
 
-	//dev_addr_mod(dev, 0, phony, ETH_ALEN);
+	////dev_addr_mod(dev, 0, phony, ETH_ALEN);
 
-	//eth_hw_addr_random(dev);
+	eth_hw_addr_random(dev);
 
 	ether_setup(dev);
 	dev->netdev_ops = &ndo;

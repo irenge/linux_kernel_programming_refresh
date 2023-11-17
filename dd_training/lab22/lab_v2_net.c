@@ -6,6 +6,9 @@
 #include <linux/init.h>
 #include <linux/version.h>
 #include <linux/etherdevice.h>
+#include <linux/in.h>
+#include <linux/skbuff.h>
+
 
 struct net_device *my_net;
 
@@ -18,7 +21,7 @@ struct my_priv {
 	u8 *pkt_data;
 	struct sk_buff *skb;
 	spinlock_t lock;
-}
+};
 
 
 
@@ -72,10 +75,9 @@ void mynet_hw_tx(char *buf, int len, struct net_device *dev) {
 
 	priv->pkt_len = len;
 	priv->pkt_data = buf;
+	
 	pr_info("\nmynet tx \n");
 	dev_kfree(priv->skb);
-
-
 }
 
 static int net_transmit(struct sk_buff *skb, struct net_device *dev) {
