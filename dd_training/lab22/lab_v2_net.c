@@ -23,8 +23,6 @@ struct my_priv {
 	spinlock_t lock;
 };
 
-
-
 static int ndo_open(struct net_device *dev) {
 	netdev_info(dev, "Hit: %s(%s)\n", __func__, dev->name);
 	//	memcpy(dev->dev_addr, "\0SNULx", ETH_ALEN);
@@ -60,7 +58,6 @@ static void printline(struct net_device *dev, unsigned char *data, int n)
 }
 
 
-
 void mynet_hw_tx(char *buf, int len, struct net_device *dev) {
 	struct net_device *dest;
 	struct my_priv *priv;
@@ -78,6 +75,19 @@ void mynet_hw_tx(char *buf, int len, struct net_device *dev) {
 	
 	pr_info("\nmynet tx \n");
 	dev_kfree(priv->skb);
+}
+
+void mynet_rx(struct net_device *dev, int len, unsigned char *buf) {
+	struct sk_buff *skb;
+	skb = dev_alloc_skb(len + 2);
+	skb_reserve(skb, 2);
+	memcpy(skb_put(skb, len), buf, len);
+	skb->dev = dev;
+	skb->protocol = eth_type_trans(skb, dev);
+	skb->ip_summed = CHECKSUM_UNNECESSARY;
+	dev->stats.rx_packets++;
+	netif_rx(skb);
+	return;
 }
 
 static int net_transmit(struct sk_buff *skb, struct net_device *dev) {
