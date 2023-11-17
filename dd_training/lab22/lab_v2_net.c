@@ -62,7 +62,7 @@ void mynet_hw_tx(char *buf, int len, struct net_device *dev) {
 	struct net_device *dest;
 	struct my_priv *priv;
 
-	if(len  < sizeof(struct ethhdr) + sizeof(struct ipthr)) {
+	if(len  < sizeof(struct ethhdr) + sizeof(struct iphdr)) {
 		pr_info("\nmynet: Hmm... packet too short (%i octets)\n", len);
 		return;
 	}
@@ -74,7 +74,7 @@ void mynet_hw_tx(char *buf, int len, struct net_device *dev) {
 	priv->pkt_data = buf;
 	
 	pr_info("\nmynet tx \n");
-	dev_kfree(priv->skb);
+	dev_kfree_skb(priv->skb);
 }
 
 void mynet_rx(struct net_device *dev, int len, unsigned char *buf) {
@@ -97,7 +97,7 @@ static int net_transmit(struct sk_buff *skb, struct net_device *dev) {
 	int i;
 	static int pkts;
 
-	struct my_data *priv = netdev_priv(dev);
+	struct my_priv *priv = netdev_priv(dev);
 
 	len = skb->len;
 	data = skb->data;
