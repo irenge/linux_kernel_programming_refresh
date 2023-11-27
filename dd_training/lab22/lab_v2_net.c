@@ -23,6 +23,8 @@ struct my_priv {
 	spinlock_t lock;
 };
 
+struct my_priv *priv;
+
 static int ndo_open(struct net_device *dev) {
 	netdev_info(dev, "Hit: %s(%s)\n", __func__, dev->name);
 	//	memcpy(dev->dev_addr, "\0SNULx", ETH_ALEN);
@@ -60,7 +62,7 @@ static void printline(struct net_device *dev, unsigned char *data, int n)
 
 void mynet_hw_tx(char *buf, int len, struct net_device *dev) {
 	struct net_device *dest;
-	struct my_priv *priv;
+//	struct my_priv *priv;
 
 	if(len  < sizeof(struct ethhdr) + sizeof(struct iphdr)) {
 		pr_info("\nmynet: Hmm... packet too short (%i octets)\n", len);
@@ -77,15 +79,17 @@ void mynet_hw_tx(char *buf, int len, struct net_device *dev) {
 	dev_kfree_skb(priv->skb);
 }
 
-void mynet_rx(struct net_device *dev, int len, unsigned char *buf) {
+void mynet_rx(struct net_device *dev, int len, unsigned char *buf, struct my_priv *priv) {
 	struct sk_buff *skb;
+	
 	skb = dev_alloc_skb(len + 2);
 	skb_reserve(skb, 2);
 	memcpy(skb_put(skb, len), buf, len);
 	skb->dev = dev;
 	skb->protocol = eth_type_trans(skb, dev);
 	skb->ip_summed = CHECKSUM_UNNECESSARY;
-	dev->stats.rx_packets++;
+	
+	priv->stats->rx_packets++;
 	netif_rx(skb);
 	return;
 }
@@ -166,9 +170,9 @@ static void mynet_setup(struct net_device *dev)
 	//dev->max_mtu = 30;
 
 
-	stats = &dev->stats;
-
-	stats->collisions = 50;
+//	stats = &dev->stats;
+//
+//	stats->collisions = 50;
 
 }
 
