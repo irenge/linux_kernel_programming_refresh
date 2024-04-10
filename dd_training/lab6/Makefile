@@ -1,7 +1,6 @@
+obj-m +=  labmaxknvmalloc.o labmaxvmalloc.o
 
-obj-m +=  queue.o 
-
-export KROOT=/lib/modules/`uname -r `/build
+export KROOT=/lib/modules/6.4.9-gentoo-dist/build
 
 allofit:  modules
 modules:

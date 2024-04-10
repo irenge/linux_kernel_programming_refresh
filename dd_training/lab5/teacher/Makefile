@@ -1,7 +1,10 @@
+### Automatic Makefile generation by 'genmake' script        ####
+### Copyright, Jerry Cooperstein, coop@linuxfoundation.org 2003-2023 ####
+### License: GPLv2 ###
 
-obj-m +=  queue.o 
+obj-m +=  sample_char_driver.o
 
-export KROOT=/lib/modules/`uname -r `/build
+export KROOT=/lib/modules/6.1.41-gentoo-dist/build
 
 allofit:  modules
 modules:

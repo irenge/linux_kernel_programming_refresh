@@ -27,7 +27,7 @@ static int __init my_init(void)
 
 	// populate the queue
 
-	for (i = 11; kfifo_put(&qring, i); i++);
+	for (i = 0; kfifo_put(&qring, i); i++);
 
 	pr_info("===================================================");
 	pr_info ("Item\tlength after item removal");

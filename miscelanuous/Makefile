@@ -1,6 +1,14 @@
-obj-m += lab_taints.o hello_kernel.o iterate_over_processes.o iterate_over_threads.o utsname.o list.o refresh_linklist.o symtable_examp.o
+obj-m += strcpy_example.o
 
-all:
-	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
-clean:
-	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean
+export KROOT=/lib/modules/6.4.12-gentoo-dist/build
+
+allofit:  modules
+modules:
+	@$(MAKE) -C $(KROOT) M=$(shell pwd) modules
+modules_install:
+	@$(MAKE) -C $(KROOT) M=$(shell pwd) modules_install
+kernel_clean:
+	@$(MAKE) -C $(KROOT) M=$(shell pwd) clean
+
+clean: kernel_clean
+	rm -rf   Module.symvers modules.order

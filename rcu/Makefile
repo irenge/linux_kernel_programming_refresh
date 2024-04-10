@@ -1,7 +1,6 @@
+obj-m +=  publish.o subscribe.o linkedlist.o list.o listrcu.o
 
-obj-m +=  queue.o 
-
-export KROOT=/lib/modules/`uname -r `/build
+export KROOT=/lib/modules/6.6.13-gentoo-gentoo-dist/build
 
 allofit:  modules
 modules:
