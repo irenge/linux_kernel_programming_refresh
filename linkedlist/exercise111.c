@@ -1,8 +1,6 @@
 #include <linux/init.h>
 #include <linux/module.h>
 
-MODULE_LICENSE("Dual BSD/GPL");
-
 static int __init  module_taint(void) {
 
 struct list_head  *listx;

@@ -1,6 +1,6 @@
-obj-m +=  list_splice.o 
+obj-m +=  workqueue_example.o
 
-export KROOT=/lib/modules/6.6.13-gentoo-gentoo-dist/build
+export KROOT=/lib/modules/`uname -r`/build
 
 allofit:  modules
 modules:

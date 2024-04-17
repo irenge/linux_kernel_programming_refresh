@@ -13,9 +13,10 @@ struct  f_entry {
 };
 
 static int __init systems_init(void) {
+	pr_info("NO RCU");
+
 	struct f_entry *system_entry;
 	int j;
-	pr_info("RCU in ");
 
 	for (j = 0; j < 20; j++) {
 		system_entry = kmalloc(sizeof(struct f_entry), GFP_KERNEL);
@@ -28,11 +29,12 @@ static int __init systems_init(void) {
 		system_entry->c = j + 2;
 		sprintf(system_entry->name, "entry %d", j + 1);
 		pr_info("... adding %s with a = %d, b = %d and c = %d\n", system_entry->name, system_entry->a, system_entry->b, system_entry->c);
-		list_add_rcu(&system_entry->odlist, &simple_list);
+		list_add(&system_entry->odlist, &simple_list);
 	}
 	return 0;
 }
 static void __exit systems_exit(void) {
+	pr_info("NO RCU");
 	struct list_head *list; /* point to list head object */
 
 	struct list_head *tmp; /* temporary list head used for deletion */
@@ -41,20 +43,16 @@ static void __exit systems_exit(void) {
 		pr_info("Odd numbers list is empty, exiting\n");
 		return;
 	}
-	
-	pr_info("RCU in: Traverse and emptying\n");
-/* RCU read side critical section */
-	rcu_read_lock();
+	pr_info("Traverse and emptying\n");
+
 	list_for_each_safe(list, tmp, &simple_list) {
 
 		struct f_entry *pili = list_entry(list, struct f_entry, odlist);
-		list_del_rcu(&pili->odlist);
+		list_del(&pili->odlist);
 
 		pr_info("Exit : %s with a = %d, b = %d and c = %d removed from list\n",pili->name, pili->a, pili->b, pili->c);
 		kfree(pili);
 	}
-	rcu_read_unlock();
-/* End of RCU readside */
 
 	/* Checking if our list is empty */
 
@@ -70,7 +68,7 @@ module_exit(systems_exit);
 
 MODULE_AUTHOR("Jules Irenge");
 MODULE_DESCRIPTION("linked list exercise ");
-MODULE_LICENSE("GPL v2");
+MODULE_LICENSE("Dual BSD/GPL");
 
 
 
