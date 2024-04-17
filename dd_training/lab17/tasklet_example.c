@@ -14,10 +14,8 @@ static struct simp {
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(5,9,0)
 static DECLARE_TASKLET(t_name, t_fun, (unsigned long) &t_data);
-//pr_info("\nNew");
 #else
 static DECLARE_TASKLET_OLD(t_name, t_fun);
-//pr_info("\n old\n");
 #endif
 
 static int __init my_init(void)
