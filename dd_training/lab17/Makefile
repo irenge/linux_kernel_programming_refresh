@@ -1,4 +1,4 @@
-obj-m +=  workqueue_example.o
+obj-m +=  wq_eg.o
 
 export KROOT=/lib/modules/`uname -r`/build
 
