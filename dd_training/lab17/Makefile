@@ -1,4 +1,4 @@
-obj-m +=  wq_eg.o
+obj-m +=  wq_eg.o char_driver_wq.o
 
 export KROOT=/lib/modules/`uname -r`/build
 
