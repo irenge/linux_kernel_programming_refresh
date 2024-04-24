@@ -1,10 +1,6 @@
-### Automatic Makefile generation by 'genmake' script        ####
-### Copyright, Jerry Cooperstein, coop@linuxfoundation.org 2003-2023 ####
-### License: GPLv2 ###
-
 obj-m +=  lab_interrupt.o
 
-export KROOT=/lib/modules/6.4.13-200.fc38.x86_64/build
+export KROOT=/lib/modules/`uname -r`/build
 
 allofit:  modules
 modules:
