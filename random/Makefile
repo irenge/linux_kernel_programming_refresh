@@ -1,4 +1,4 @@
-obj-m +=  xrandom.o
+obj-m +=  xrandom.o linked_list_herc.o
 
 export KROOT=/lib/modules/`uname -r`/build
 
