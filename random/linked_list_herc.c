@@ -20,24 +20,21 @@
 #include <linux/types.h>
 
 // Initialiase a list 
-static LIST_HEAD(ll_list);
+static LIST_HEAD(hercules_tasks_list);
 
 struct lst_node_str {
-	u64 value;
+	short unsigned value;
 	char action[50];
 	struct list_head tlist;
 
 };
-void choice(struct lst_node_str *xl, int x);
-
-
-
+void hercules_task(struct lst_node_str *xl);
 
 static  int __init ll_init(void) {
 
 	struct lst_node_str *first_lst;
-	int j;
-int r;
+	short unsigned  j;
+	short unsigned r;
 	struct list_head *p;
 
 
@@ -48,24 +45,23 @@ int r;
 			return -ENOMEM;
 		}
 		//get the random number 
-		get_random_bytes(&r, sizeof(u64));
+		get_random_bytes(&r, sizeof(short unsigned));
 		//r = r % 12;
-		first_lst->value = r % 12;
+		first_lst->value = (r % 12) + 1;
 		// set action 
-		
-		choice(first_lst, j);
-		pr_info("Adding %s at position %d to Todo list\n", first_lst->action, first_lst->value);
-		list_add(&first_lst->tlist, &ll_list);
+		hercules_task(first_lst);
+		//pr_info("Adding %s at position %d to Todo list\n", first_lst->action, first_lst->value);
+		list_add(&first_lst->tlist, &hercules_tasks_list);
 	}
 
 
 	pr_info("Traversing a list ");
 	pr_info(" ====================");
 
-	list_for_each(p, &ll_list) {
+	list_for_each(p, &hercules_tasks_list) {
 
 		struct lst_node_str  *f = list_entry(p, struct lst_node_str, tlist);
-		pr_info("%s and % d", f->action, f->value);
+		pr_info("%d: %s\n", f->value, f->action);
 
 
 	}
@@ -73,7 +69,14 @@ int r;
 	return 0;
 }
 
-void choice(struct lst_node_str *xl, int x) {
+void hercules_task(struct lst_node_str *xl) {
+	
+	short unsigned x;
+	x = xl->value;
+
+	// avoid zero value
+	//if (x == 0)
+	//	x = 
 
 	switch(x) {
 		case 1:
@@ -124,27 +127,27 @@ static void __exit ll_exit(void) {
 
 	struct list_head *tmp; /* temporary list head used for deletion */
 
-	if (list_empty(&ll_list)) {
-		pr_info(" Todos list is empty, exiting\n");
+	if (list_empty(&hercules_tasks_list)) {
+		pr_info(" Hercules task list is empty, exiting\n");
 		return;
 	}
-	pr_info("Todos list is not empty, emptying\n");
+	pr_info("Hercules task list is not empty, emptying\n");
 
-	list_for_each_safe(ttlist, tmp, &ll_list) {
+	list_for_each_safe(ttlist, tmp, &hercules_tasks_list) {
 
 		struct lst_node_str *pili = list_entry(ttlist, struct lst_node_str, tlist);
 		list_del(&pili->tlist);
 
-		pr_info("Todos (exit) : %s at position %d removed from list\n", pili->action, pili->value);
+		pr_info("Hercules task (exit) : %s at position %d removed from list\n", pili->action, pili->value);
 		kfree(pili);
 	}
 
 	/* Checking if our list is empty */
 
-	if (list_empty(&ll_list))
-		pr_info("Done: Todos list is empty!\n");
+	if (list_empty(&hercules_tasks_list))
+		pr_info("Done: Hercules task list is empty!\n");
 	else
-		pr_info("Todos list is still NOT empty though!\n");
+		pr_info("Hercules task list is still NOT empty though!\n");
 
 
 
